@@ -1,6 +1,6 @@
 #+TITLE My Emacs configuration
 
-Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for some basic settings.
+* Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for some basic settings.
 
 #+BEGIN_SRC emacs-lisp
   (load-file "~/.emacs.d/sensible-defaults.el")
@@ -20,5 +20,57 @@ Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for so
         calendar-latitude 52.379
         calendar-longitude 4.899
         calendar-location-name "Amsterdam, Netherlands")
-#+END_SRC<Paste>
+#+END_SRC
 
+
+* Basic package management setup
+** Setup packages.el
+
+#+BEGIN_SRC emacs-lisp
+	;;; Load emacs builtin package manager
+	;;; Load packages both from marmalade and melpa
+	(require 'package)
+	(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+	(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+
+	(setq package-enable-at-startup nil)
+	(package-initialize)
+#+END_SRC
+
+** Setup use-package
+
+#+BEGIN_SRC emacs-lisp
+	(unless (package-installed-p 'use-package)
+	(package-refresh-contents)
+	(package-install 'use-package))
+
+	(eval-when-compile
+	(require 'use-package))
+#+END_SRC
+
+
+* Evil mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+	:ensure t
+	:init
+	(evil-mode 1)
+)
+
+#+END_SRC
+
+
+* Setting up Helm
+
+#+BEGIN_SRC emacs-lisp
+
+(use-package helm
+    :ensure t
+    :diminish helm-mode
+    :config
+    (require 'helm-config)
+    (helm-mode)
+)
+
+#+END_SRC
