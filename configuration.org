@@ -58,8 +58,8 @@
 	(evil-mode 1)
 )
 
-#+END_SRC
 
+#+END_SRC
 
 * Setting up Helm
 
@@ -71,6 +71,31 @@
     :config
     (require 'helm-config)
     (helm-mode)
+    :bind (("M-x" . helm-M-x))
+    :bind (:map helm-map
+		("C-k" . helm-previous-line)
+		("C-k" . helm-next-line)
+		("C-u" . helm-previous-page)
+		("C-d" . helm-next-page)
+)
+)
+
+#+END_SRC
+
+
+* Leader key setup
+
+#+BEGIN_SRC emacs-lisp
+
+(use-package evil-leader
+:ensure t
+:init (global-evil-leader-mode)
+:config (progn
+(setq evil-leader/in-all-states t)
+(evil-leader/set-key
+"r" 'helm-mini
+)
+)
 )
 
 #+END_SRC
