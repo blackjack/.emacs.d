@@ -15,10 +15,10 @@
 
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Oleksandr Senkovych"
-        user-mail-address "bjsenya@gmail.com"
-        calendar-latitude 52.379
-        calendar-longitude 4.899
-        calendar-location-name "Amsterdam, Netherlands")
+	user-mail-address "bjsenya@gmail.com"
+	calendar-latitude 52.379
+	calendar-longitude 4.899
+	calendar-location-name "Amsterdam, Netherlands")
 #+END_SRC
 
 
@@ -34,6 +34,8 @@
 
 	(setq package-enable-at-startup nil)
 	(package-initialize)
+
+
 #+END_SRC
 
 ** Setup use-package
@@ -47,6 +49,19 @@
 	(require 'use-package))
 #+END_SRC
 
+* General configuration
+#+BEGIN_SRC emacs-lisp
+;;Set caching directory
+	(defconst spacemacs-cache-directory
+	 (expand-file-name (concat user-emacs-directory "cache/"))
+	 "Spacemacs storage area for persistent files")
+
+	(unless (file-exists-p spacemacs-cache-directory)
+			(make-directory spacemacs-cache-directory))
+;;Prefer vertical splits over horizontal
+	(setq split-height-threshold 0)
+
+#+END_SRC
 
 * Evil mode
 
@@ -89,10 +104,10 @@
 
     ;; modes to map to different default states
     (dolist (mode-map '((comint-mode . emacs)
-                        (term-mode . emacs)
-                        (eshell-mode . emacs)
-                        (help-mode . emacs)
-                        (fundamental-mode . emacs)))
+			(term-mode . emacs)
+			(eshell-mode . emacs)
+			(help-mode . emacs)
+			(fundamental-mode . emacs)))
       (evil-set-initial-state `,(car mode-map) `,(cdr mode-map)))))
 
 (provide 'init-evil)
@@ -134,32 +149,54 @@
 
 * Leader key shortcuts
 
-#+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
     (setq evil-leader/in-all-states t)
 ;;Set leader to comma
     (setq evil-leader/leader ",")
 
     (evil-leader/set-key
-	    "a" 'ag-project
-	    "A" 'ag
-	    "b" 'ido-switch-buffer
-	    "c" 'mc/mark-next-like-this
-	    "C" 'mc/mark-all-like-this
-	    "e" 'er/expand-region
-	    "E" 'mc/edit-lines
-	    "f" 'ido-find-file
-	    "g" 'magit-status
-	    "i" 'idomenu
-	    "j" 'ace-jump-mode
-	    "k" 'kill-buffer
-	    "K" 'kill-this-buffer
-	    "o" 'occur
-	    "p" 'magit-find-file-completing-read
-	    "r" 'recentf-ido-find-file
-	    "s" 'ag-project
-	    "t" 'bw-open-term
-	    "T" 'eshell
-	    "w" 'save-buffer
-	    "x" 'smex
+		"r" 'helm-recentf
+		"b" 'helm-buffers-list
+		"ut"'undo-tree-visualize
+		"a" 'ag-project
+		"A" 'ag
+		"c" 'mc/mark-next-like-this
+		"C" 'mc/mark-all-like-this
+		"e" 'er/expand-region
+		"E" 'mc/edit-lines
+		"f" 'ido-find-file
+		"g" 'magit-status
+		"i" 'idomenu
+		"j" 'ace-jump-mode
+		"k" 'kill-buffer
+		"K" 'kill-this-buffer
+		"o" 'occur
+		"p" 'magit-find-file-completing-read
+		"s" 'ag-project
+		"t" 'bw-open-term
+		"T" 'eshell
+		"w" 'save-buffer
+		"x" 'smex
 	    )
-#+END_SRC
+  #+END_SRC
+
+* Undo tree
+
+  #+BEGIN_SRC emacs-lisp
+
+  (use-package undo-tree
+      :ensure t
+      :init
+      (global-undo-tree-mode)
+      (setq undo-tree-visualizer-timestamps t)
+      (setq undo-tree-visualizer-diff t)
+  )
+
+
+  (setq undo-tree-auto-save-history t
+	undo-tree-history-directory-alist
+	   `(("." . ,(concat spacemacs-cache-directory "undo"))))
+  (unless (file-exists-p (concat spacemacs-cache-directory "undo"))
+  (make-directory (concat spacemacs-cache-directory "undo")))
+
+  #+END_SRC
